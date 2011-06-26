@@ -1,6 +1,4 @@
-# Now, this Unite source is bundled in original unite.vim
-
-# So, You don't need to install unite-lines explicitly, so Don't use this reository
+# Now, this Unite source is bundled in original unite.vim. You don't need to install unite-lines explicitly, so Don't use this reository
 
 _2011/06/26_
 
