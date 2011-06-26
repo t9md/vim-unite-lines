@@ -11,19 +11,21 @@ let s:unite_source.hooks = {}
 let s:unite_source.name = 'lines'
 
 function! s:unite_source.hooks.on_syntax(args, context) "{{{
-    if !g:unite_source_lines_highlight | return | endif
-    exe "syntax match uniteSource_Lines_target '" . a:context.input . "' containedin=uniteSource_Lines"
+  call s:hl_refresh(a:context)
 endfunction"}}}
 
 exe "highlight uniteSource_Lines_target " . g:unite_source_lines_highlight_color
 
 function! s:hl_refresh(context)
-    if !g:unite_source_lines_highlight | return | endif
-    exe "syntax clear uniteSource_Lines_target"
-    for word in split(a:context.input, '\v\s+')
-        let word = substitute(word, '\*' , '.*', "g")
-        exe "syntax match uniteSource_Lines_target '" . word .
-                    \ "' containedin=uniteSource_Lines"
+    syntax clear uniteSource_Lines_target
+    if a:context.input == '' || !g:unite_source_lines_highlight
+        return
+    endif
+
+    for word in split(a:context.input, '\\\@<! ')
+        execute "syntax match uniteSource_Lines_target '"
+          \ . unite#escape_match(word)
+          \ . "' containedin=uniteSource_Lines"
     endfor
 endfunction
 
@@ -57,4 +59,4 @@ endfunction "}}}
 " call unite#define_source(s:unite_source)
 " unlet s:unite_source
 " }}}
-
+" vim: expandtab:ts=4:sts=4:sw=4
