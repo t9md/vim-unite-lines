@@ -14,9 +14,11 @@ function! s:unite_source.hooks.on_syntax(args, context) "{{{
   call s:hl_refresh(a:context)
 endfunction"}}}
 
-exe "highlight uniteSource_Lines_target " . g:unite_source_lines_highlight_color
 
 function! s:hl_refresh(context)
+    if !hlexists("uniteSource_Lines_target")
+        exe "highlight uniteSource_Lines_target " . g:unite_source_lines_highlight_color
+    endif
     syntax clear uniteSource_Lines_target
     if a:context.input == '' || !g:unite_source_lines_highlight
         return
@@ -50,6 +52,7 @@ endfunction
 function! s:unite_source.hooks.on_close(args, context)
     if !g:unite_source_lines_highlight | return | endif
     exe "syntax clear uniteSource_Lines_target"
+    exe "highlight clear uniteSource_Lines_target"
 endfunction
 
 function! unite#sources#lines#define() "{{{
